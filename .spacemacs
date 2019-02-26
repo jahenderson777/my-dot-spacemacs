@@ -54,7 +54,7 @@ values."
      ;; spell-checking
      syntax-checking
      ;;
-     treemacs
+     
      ;;version-control
      )
    ;; List of additional packages that will be installed without being
