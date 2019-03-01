@@ -31,8 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     javascript
      markdown
+     javascript
      clojure(clojure :variables
                      clojure-enable-fancify-symbols t
                      clojure-enable-clj-refactor t)
@@ -54,7 +54,6 @@ values."
      ;; spell-checking
      syntax-checking
      ;;
-     ;;treemacs
      ;;version-control
      )
    ;; List of additional packages that will be installed without being
@@ -370,6 +369,18 @@ ARG has the same meaning as for `kill-sexp'."
       (select-window owin)
       (unless (one-window-p) (delete-window owin)))))
 
+(defun my-fancify-symbols ()
+  "Pretty symbols for Clojure's anonymous functions and sets,
+   like (λ [a] (+ a 5)), ƒ(+ % 5), and ∈{2 4 6}."
+  (font-lock-add-keywords 'clojurescript-mode
+                          `(("(\\(<-\\)"
+                             (0 (progn (compose-region (match-beginning 1)
+                                                       (match-end 1) "⮜"))))))
+  (font-lock-add-keywords 'clojure-mode
+                          `(("(\\(<-\\)"
+                             (0 (progn (compose-region (match-beginning 1)
+                                                       (match-end 1) "⮜")))))))
+
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -378,6 +389,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (require 'flycheck-joker)
+  (my-fancify-symbols)
   (global-set-key (kbd "C-x <up>") 'windmove-up)
   (global-set-key (kbd "C-x <down>") 'windmove-down)
   (global-set-key (kbd "C-x <left>") 'windmove-left)
@@ -425,13 +437,17 @@ you should place your code here."
   (global-set-key (kbd "<f4>") 'evil-open-folds) 
   (global-set-key (kbd "<C-f1>") 'help-command)
   (global-set-key (kbd "C-c 4") '4-pane-layout)
+
+  (setq cider-cljs-repl-type 'figwheel)
+  (setq cider-default-cljs-repl 'figwheel)
+
   (global-set-key (kbd "<home>") 'beginning-of-line)
   (global-set-key (kbd "<end>") 'end-of-line)
   (global-set-key (kbd "C-<home>") 'beginning-of-buffer)
   (global-set-key (kbd "C-<end>") 'end-of-buffer)
 
+
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  
 
   (spacemacs/toggle-truncate-lines-off)
   (setq-default truncate-lines t)
@@ -451,7 +467,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc company-tern dash-functional tern coffee-mode mmm-mode markdown-toc markdown-mode gh-md flycheck transpose-frame graphql-mode smeargle orgit magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flycheck-pos-tip pos-tip evil-magit magit magit-popup git-commit with-editor diff-hl helm-company helm-c-yasnippet fuzzy company-statistics company clojure-snippets auto-yasnippet ac-ispell auto-complete flycheck-joker clj-refactor inflections edn multiple-cursors paredit yasnippet peg cider-eval-sexp-fu cider sesman queue clojure-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (mmm-mode markdown-toc markdown-mode gh-md web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc company-tern dash-functional tern coffee-mode transpose-frame graphql-mode smeargle orgit magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flycheck-pos-tip pos-tip evil-magit magit magit-popup git-commit with-editor diff-hl helm-company helm-c-yasnippet fuzzy company-statistics company clojure-snippets auto-yasnippet ac-ispell auto-complete flycheck-joker clj-refactor inflections edn multiple-cursors paredit yasnippet peg cider-eval-sexp-fu cider sesman queue clojure-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
